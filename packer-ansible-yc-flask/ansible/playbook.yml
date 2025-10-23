@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    app_dir: /opt/app
+    user: app-user
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Python and necessary tools
+      apt:
+        name: ["python3-pip", "python3-venv", "git"]
+        state: present
+
+    - include_role:
+        name: app
+    - include_role:
+        name: nginx

@@ -1,0 +1,48 @@
+- name: Create application user
+  user:
+    name: "{{ user }}"
+    system: yes
+    create_home: no
+
+- name: Create application directory
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+
+- name: Copy application files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ app_dir }}/"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  loop:
+    - main.py
+    - requirements.txt
+    - wsgi.py
+
+- name: Create Python virtual environment
+  command:
+    cmd: python3 -m venv "{{ app_dir }}/venv"
+    creates: "{{ app_dir }}/venv/bin/activate"
+
+- name: Install Python dependencies using pip from virtualenv
+  pip:
+    requirements: "{{ app_dir }}/requirements.txt"
+    virtualenv: "{{ app_dir }}/venv"
+
+- name: Create systemd service
+  template:
+    src: app.service.j2
+    dest: /etc/systemd/system/app.service
+  vars:
+    app_dir: "{{ app_dir }}"
+    user: "{{ user }}"
+
+- name: Start application service
+  systemd:
+    name: app
+    enabled: yes
+    state: started
+
