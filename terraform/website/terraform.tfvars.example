@@ -1,0 +1,21 @@
+# Copy to terraform.tfvars and adjust as needed
+project = "website"
+env     = "dev"
+zone    = "ru-central1-a"
+
+vpc_cidr    = "10.20.0.0/16"
+subnet_cidr = "10.20.1.0/24"
+
+ssh_public_key = "ssh-ed25519 AAAA... user@host"
+
+vm_cores        = 2
+vm_memory_gb    = 2
+vm_disk_size_gb = 20
+
+bucket_versioning = true
+
+pg_version            = "14"
+pg_resource_preset_id = "s2.micro"
+pg_disk_size_gb       = 20
+pg_database_name      = "appdb"
+pg_user_name          = "appuser"
