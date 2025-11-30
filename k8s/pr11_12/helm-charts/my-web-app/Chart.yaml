@@ -1,0 +1,5 @@
+apiVersion: v2
+name: my-web-app
+description: A simple web application with NGINX frontend and Flask backend
+version: 0.1.0
+appVersion: "1.0.0"
